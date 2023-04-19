@@ -8,7 +8,7 @@
 #define DHTPIN 6
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
-// DS1302接線指示: 可依需求修改
+
 // DS1302 CLK/SCLK --> 10
 // DS1302 DAT/IO --> 9
 // DS1302 RST/CE --> 8
@@ -17,21 +17,15 @@ DHT dht(DHTPIN, DHTTYPE);
 
 ThreeWire myWire(9, 10, 8); // IO, SCLK, CE
 RtcDS1302<ThreeWire> Rtc(myWire);
-
-LiquidCrystal_PCF8574 lcd(0x27); // 設定i2c位址，一般情況就是0x27和0x3F兩種
-
-byte col, row, nb = 0, bc = 0;                            // general
-//int bb[8];  // 若編譯出現錯誤，請用這行
-byte bb[8];  
+LiquidCrystal_PCF8574 lcd(0x27); 
 
 void setup ()
 {
   Serial.begin(9600);
   dht.begin();
-  lcd.begin(16, 2);  //16x2的LCD
-  //lcd.begin(20, 4); //20x4的LCD
-  lcd.setBacklight(255); //背光設到最大
-  lcd.clear(); //清除畫面
+  lcd.begin(16, 2); 
+  lcd.setBacklight(255); 
+  lcd.clear(); 
   Serial.print("compiled: ");
   Serial.print(__DATE__);
   Serial.println(__TIME__);
@@ -108,14 +102,13 @@ void loop ()
   lcd.print(":");
   lcd.print(now.Minute());
 
-  float h = dht.readHumidity();   //取得濕度
-  float t = dht.readTemperature();  //取得溫度C
+  float h = dht.readHumidity();   
+  float t = dht.readTemperature();  
 
   lcd.setCursor(1, 1); 
   lcd.print(h);
   lcd.setCursor(5, 1);
   lcd.print("%");
-
 
   lcd.setCursor(9, 1);  
   lcd.print(t);
@@ -123,7 +116,7 @@ void loop ()
   lcd.print((char)223); 
   lcd.setCursor(14, 1);
   lcd.print("C");
-  delay(10000); // 10秒更新一次
+  delay(10000); // update every 10 sec
 }
 
 #define countof(a) (sizeof(a) / sizeof(a[0]))
@@ -131,7 +124,6 @@ void loop ()
 void printDateTime(const RtcDateTime& dt)
 {
   char datestring[20];
-
   snprintf_P(datestring,
              countof(datestring),
              PSTR("%02u/%02u/%04u %02u:%02u:%02u"),
@@ -143,7 +135,6 @@ void printDateTime(const RtcDateTime& dt)
              dt.Second() );
   Serial.print(datestring);
 }
-
 
 int freeRam(void) {
   extern int  __bss_end, *__brkval;
