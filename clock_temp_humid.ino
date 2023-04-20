@@ -97,9 +97,13 @@ void loop ()
     lcd.print("M");
   }
  
-  lcd.setCursor(10, 0);
+  lcd.setCursor(9, 0);
+  if(now.Hour() < 10)
+      lcd.print("0");
   lcd.print(now.Hour());
   lcd.print(":");
+  if(now.Minute() < 10)
+      lcd.print("0");
   lcd.print(now.Minute());
 
   float h = dht.readHumidity();   
